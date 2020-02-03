@@ -1640,15 +1640,10 @@ public final class DBMaker{
 
         protected Volume.VolumeFactory  extendStoreVolumeFactory(boolean index) {
             String volume = props.getProperty(Keys.volume);
-            boolean cleanerHackEnabled = propsGetBool(Keys.fileMmapCleanerHack);
             if(Keys.volume_byteBuffer.equals(volume))
                 return Volume.ByteArrayVol.FACTORY;
             else if(Keys.volume_directByteBuffer.equals(volume))
-                return cleanerHackEnabled?
-                        Volume.MemoryVol.FACTORY_WITH_CLEANER_HACK:
-                        Volume.MemoryVol.FACTORY;
-            else if(Keys.volume_unsafe.equals(volume))
-                return Volume.UNSAFE_VOL_FACTORY;
+                return Volume.MemoryVol.FACTORY;
             int rafMode = propsGetRafMode();
             if(rafMode == 3)
                 return Volume.FileChannelVol.FACTORY;
@@ -1658,9 +1653,7 @@ public final class DBMaker{
 
             return raf?
                     Volume.RandomAccessFileVol.FACTORY:
-                    (cleanerHackEnabled?
-                            Volume.MappedFileVol.FACTORY_WITH_CLEANER_HACK:
-                            Volume.MappedFileVol.FACTORY);
+                    Volume.MappedFileVol.FACTORY;
         }
 
     }

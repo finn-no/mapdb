@@ -585,40 +585,6 @@ public class DBMakerTest{
         db.close();
     }
 
-
-    @Test public void fileMmapCleanerHack_file(){
-        DB db = DBMaker.fileDB(TT.tempDbFile())
-                .fileMmapEnable()
-                .transactionDisable()
-                .make();
-        assertFalse(((Volume.MappedFileVol)((StoreDirect) db.engine).vol).cleanerHackEnabled);
-        db.close();
-
-        db = DBMaker.fileDB(TT.tempDbFile())
-                .fileMmapEnable()
-                .fileMmapCleanerHackEnable()
-                .transactionDisable()
-                .make();
-        assertTrue(((Volume.MappedFileVol) ((StoreDirect) db.engine).vol).cleanerHackEnabled);
-        db.close();
-    }
-
-
-    @Test public void fileMmapCleanerHack_memory(){
-        DB db = DBMaker.memoryDirectDB()
-                .transactionDisable()
-                .make();
-        assertFalse(((Volume.ByteBufferVol) ((StoreDirect) db.engine).vol).cleanerHackEnabled);
-        db.close();
-
-        db = DBMaker.memoryDirectDB()
-                .fileMmapCleanerHackEnable()
-                .transactionDisable()
-                .make();
-        assertTrue(((Volume.ByteBufferVol) ((StoreDirect) db.engine).vol).cleanerHackEnabled);
-        db.close();
-    }
-
     @Test public void file_locked() throws IOException {
         File f = File.createTempFile("mapdbTest", "mapdb");
         DB db = DBMaker.fileDB(f).transactionDisable().make();
